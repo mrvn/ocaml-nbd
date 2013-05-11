@@ -1,0 +1,47 @@
+OASISFormat:  0.1
+Name:         ocaml-nbd
+Version:      0.0.0
+#LicenseFile:  ?
+License:      GPL-3+ with OCaml linking exception
+Authors:      Goswin von Brederlow <goswin-v-b@web.de>
+Copyrights:
+              (C) 2013 Goswin von Brederlow
+Homepage:     https://github.com/mrvn/ocaml-nbd
+BuildTools:   ocamlbuild
+Plugins:      DevFiles (0.2), META (0.2)
+
+Synopsis: Ocaml modules for the NBD protocol
+Description:
+  Modules for generating and parsing the NBD protocol. This includes
+  the new style handshake with feature negotiation as well as actual
+  requests. The modules are based on nbd protocol version 3.0, which
+  includes non-rotational disks, FUA, FLUSH and TRIM commands.
+
+Flag strict
+  Description: Strict compile-time checks
+  Default: true
+
+Library nbd
+  Path: src
+  Modules: Nbd
+  if flag(strict) && ccomp_type(cc)
+    CCOpt: -std=c89 -pedantic -Wno-long-long
+  BuildDepends: unix, bigarray, extunix
+
+Executable server
+  Path: server
+  Install: true
+  CompiledObject: best
+  MainIs: server.ml
+  BuildDepends: unix, bigarray, extunix, nbd
+
+Document api
+  Title: API reference for nbd
+  Type: ocamlbuild (0.2)
+  Authors: Goswin von Brederlow
+  BuildTools: ocamldoc
+  Format: HTML
+  Index: index.html
+  XOCamlbuildPath:      src/
+  XOCamlbuildLibraries: nbd
+
